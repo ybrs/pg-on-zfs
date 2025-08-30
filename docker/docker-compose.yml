@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  pg:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - pgdata:/hostdata
+    ports:
+      - "5432:5432"
+volumes:
+  pgdata:
