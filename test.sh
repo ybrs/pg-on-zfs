@@ -13,6 +13,7 @@ trap 'echo "\n--- docker logs for $container ---"; docker logs "$container" || t
 until docker exec "$container" pg_isready -U postgres >/dev/null 2>&1; do
   if ! docker ps --format '{{.Names}}' | grep -q "^${container}$"; then
     echo "Container $container is not running"
+    docker logs "$container" || true
     exit 1
   fi
   elapsed=$(( \
@@ -20,6 +21,7 @@ until docker exec "$container" pg_isready -U postgres >/dev/null 2>&1; do
   ))
   if [ "$elapsed" -ge "$timeout_seconds" ]; then
     echo "Timed out waiting for postgres after ${timeout_seconds}s"
+    docker logs "$container" || true
     exit 1
   fi
   sleep 1
