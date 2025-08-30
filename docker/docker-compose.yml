@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  pg:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: pg-on-zfs
+    volumes:
+      - ../hostdata:/hostdata
+    ports:
+      - "5432:5432"
