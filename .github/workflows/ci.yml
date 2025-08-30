@@ -13,3 +13,10 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: false
+          tags: pg-on-zfs:test
+      - name: Run container tests
+        run: |
+          mkdir -p hostdata
+          docker run -d --name pg-test --privileged -v ${GITHUB_WORKSPACE}/hostdata:/hostdata pg-on-zfs:test
+          ./test.sh pg-test
+          docker rm -f pg-test
