@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  pg:
+    build: .
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../data:/hostdata
+    privileged: true
