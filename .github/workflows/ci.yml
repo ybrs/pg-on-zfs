@@ -12,4 +12,8 @@ jobs:
         with:
           context: .
           file: docker/Dockerfile
+          load: true
+          tags: pg-on-zfs:test
           push: false
+      - run: docker run -d --name pgtest --privileged pg-on-zfs:test
+      - run: ./test.sh pgtest
