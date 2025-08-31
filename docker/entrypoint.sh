@@ -28,12 +28,18 @@ if ! zfs list pgpool/pgdata >/dev/null 2>&1; then
   zfs create -o mountpoint=/pgpool/pgdata pgpool/pgdata
 fi
 
+# create dataset for the main database tablespace if needed
+if ! zfs list pgpool/db_maindb >/dev/null 2>&1; then
+  zfs create -o mountpoint=/pgpool/db_maindb pgpool/db_maindb
+fi
+
 chown -R postgres:postgres /pgpool
 
 if [ ! -s /pgpool/pgdata/PG_VERSION ]; then
   su - postgres -c "initdb -D /pgpool/pgdata"
   su - postgres -c "pg_ctl -D /pgpool/pgdata -w start"
-  su - postgres -c "createdb -D pg_default maindb"
+  su - postgres -c "psql -c \"CREATE TABLESPACE db_maindb LOCATION '/pgpool/db_maindb';\""
+  su - postgres -c "createdb -D db_maindb maindb"
   su - postgres -c "pg_ctl -D /pgpool/pgdata stop"
 fi
 
