@@ -14,11 +14,10 @@ fi
 
 # create or import the pgpool pool
 if ! zpool list -H -o name | grep -q '^pgpool$'; then
-  if [ -e /hostdata/pgpool.img ]; then
-    zpool import -d /hostdata pgpool || \
-      zpool create -f -o ashift=12 pgpool /hostdata/pgpool.img
+  if zpool import -d /hostdata pgpool >/dev/null 2>&1; then
+    echo "Imported existing pgpool"
   else
-    truncate -s ${ZPOOL_SIZE:-60G} /hostdata/pgpool.img
+    [ -e /hostdata/pgpool.img ] || truncate -s ${ZPOOL_SIZE:-60G} /hostdata/pgpool.img
     zpool create -f -o ashift=12 pgpool /hostdata/pgpool.img
   fi
 fi
