@@ -1,3 +1,5 @@
+Please check https://github.com/ybrs/foldout for similar functionality
+
 # pg-on-zfs
 
 Local PostgreSQL branching on macOS using ZFS inside Docker. This proof of concept keeps a stock Postgres cluster and uses ZFS clones for instant writable snapshots. The included Python `pgbranchd` listens on a Unix socket and handles simple `SNAPSHOT` and `DROP` commands.
